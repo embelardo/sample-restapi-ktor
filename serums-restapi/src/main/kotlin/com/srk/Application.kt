@@ -15,6 +15,7 @@ fun main(args: Array<String>): Unit =
 fun Application.module() {
     // Install Routing plugin (Allows definition of structured routes and associated handlers)
     install(Routing) {
+        trace { application.log.trace(it.buildText()) }
         // Add routes to this API.
         serumApi()
     }

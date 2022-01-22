@@ -1,7 +1,9 @@
-val jackson_version: String by project
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
+val jacksonVersion: String by project
+val kluentVersion: String by project
+val kotlinVersion: String by project
+val ktorVersion: String by project
+val logbackVersion: String by project
+val spekVersion: String by project
 
 plugins {
     application
@@ -19,12 +21,19 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-host-common:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-host-common:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("io.ktor:ktor-jackson:1.6.7")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform {
+        includeEngines("junit-jupiter")
+    }
 }
