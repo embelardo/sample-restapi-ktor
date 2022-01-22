@@ -1,1 +1,2 @@
-rootProject.name = "sample-restapi-ktor"
+rootProject.name = "serums"
+include("serums-restapi")

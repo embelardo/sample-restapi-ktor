@@ -1,6 +1,5 @@
 /.idea
 /.gradle
 /.settings
-/makefile
-/build
-/out
+build
+out
