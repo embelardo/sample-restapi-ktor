@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import java.time.LocalDate
 
-data class SrkData(
-    val uid: String,
+data class Serum(
+    val id: Int,
     val name: String,
     val phase: Phase,
     val tester: String,

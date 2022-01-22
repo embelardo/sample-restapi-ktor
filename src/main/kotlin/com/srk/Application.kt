@@ -16,7 +16,7 @@ fun Application.module() {
     // Install Routing plugin (Allows definition of structured routes and associated handlers)
     install(Routing) {
         // Add routes to this API.
-        srkApi()
+        serumApi()
     }
 
     // Install Status Pages plugin (Allows response to thrown application exceptions)
