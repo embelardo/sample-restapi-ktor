@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 
 class DeleteSerum {
     @Test
-    fun deleteSerum() {
+    fun `Delete serum`() {
         withTestApplication(Application::module) {
             handleRequest(HttpMethod.Delete, "/api/serums/0").apply {
                 assertEquals(HttpStatusCode.NoContent, response.status())

@@ -6,9 +6,9 @@ import io.ktor.server.testing.*
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class GetSerum {
+class ReadSerum {
     @Test
-    fun getAllSerums() {
+    fun `Read all serums`() {
         withTestApplication(Application::module) {
             handleRequest(HttpMethod.Get, "/api/serums").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -17,7 +17,7 @@ class GetSerum {
     }
 
     @Test
-    fun getOneSerum() {
+    fun `Read one serum`() {
         withTestApplication(Application::module) {
             handleRequest(HttpMethod.Get, "/api/serums/0").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -26,7 +26,7 @@ class GetSerum {
     }
 
     @Test
-    fun getNonExistentSerum() {
+    fun `Read non-existent serum`() {
         withTestApplication(Application::module) {
             handleRequest(HttpMethod.Get, "/api/serums/100").apply {
                 assertEquals(HttpStatusCode.NotFound, response.status())

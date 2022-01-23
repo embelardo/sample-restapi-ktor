@@ -6,9 +6,9 @@ import io.ktor.server.testing.*
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class PostSerum {
+class CreateSerum {
     @Test
-    fun postSerum() = withTestApplication(Application::module) {
+    fun `Create serum`() = withTestApplication(Application::module) {
         with(handleRequest(HttpMethod.Post, "/api/serums") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             setBody(newSerum)
