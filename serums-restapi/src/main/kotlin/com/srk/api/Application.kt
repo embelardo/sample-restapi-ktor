@@ -1,24 +1,38 @@
 package com.srk.api
 
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.srk.service.data.SerumServiceImpl
+import com.srk.di.appModule
+import com.srk.service.data.SerumService
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.koin.ktor.ext.Koin
+import org.koin.ktor.ext.inject
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
 
-@Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
+    // Install Koin plugin (Allows dependency injection)
+    install(Koin) {
+        modules(appModule)
+    }
+
+    // Inject dependency
+    val serumService: SerumService by inject()
+    moduleWithDependencies(serumService)
+}
+
+fun Application.moduleWithDependencies(serumService: SerumService) {
     // Install Routing plugin (Allows definition of structured routes and associated handlers)
     install(Routing) {
+        // Enable route-resolution tracing
         trace { application.log.trace(it.buildText()) }
+
         // Add routes to this API.
-        val serumService = SerumServiceImpl()
         serumApi(serumService)
     }
 

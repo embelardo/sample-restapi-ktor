@@ -1,4 +1,4 @@
-rootProject.name = "serums"
+rootProject.name = "serums-restapi"
 
 include("serums-restapi")
 include("serums-shared")
