@@ -1,5 +1,7 @@
 package com.srk
 
+import com.srk.shared.Phase
+import com.srk.shared.Serum
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
