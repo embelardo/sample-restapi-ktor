@@ -9,18 +9,19 @@ plugins {
     kotlin("jvm") version "1.6.10"
 }
 
+repositories {
+    mavenCentral()
+}
+
 group = "com.srk"
 version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(project(":serums-shared"))
+    implementation(project(":serums-service-data"))
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-host-common:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")

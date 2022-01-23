@@ -1,6 +1,7 @@
 package com.srk.api
 
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.srk.service.data.SerumServiceImpl
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -17,7 +18,8 @@ fun Application.module() {
     install(Routing) {
         trace { application.log.trace(it.buildText()) }
         // Add routes to this API.
-        serumApi()
+        val serumService = SerumServiceImpl()
+        serumApi(serumService)
     }
 
     // Install Status Pages plugin (Allows response to thrown application exceptions)
