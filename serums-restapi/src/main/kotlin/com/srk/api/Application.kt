@@ -1,4 +1,4 @@
-package com.srk
+package com.srk.api
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*

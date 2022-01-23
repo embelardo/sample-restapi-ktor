@@ -1,4 +1,4 @@
-package com.srk
+package com.srk.api
 
 import com.srk.shared.Phase
 import com.srk.shared.Serum

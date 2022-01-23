@@ -1,4 +1,4 @@
-package com.srk
+package com.srk.api
 
 import io.ktor.application.*
 import io.ktor.http.*
