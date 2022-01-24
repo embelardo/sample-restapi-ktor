@@ -1,5 +1,6 @@
-package com.srk.di
+package com.srk.api.junit
 
+import com.srk.di.appModule
 import com.srk.service.data.SerumService
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin

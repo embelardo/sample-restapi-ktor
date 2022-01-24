@@ -1,10 +1,12 @@
 val jacksonVersion: String by project
 val junit5Version: String by project
+val kluentVersion: String by project
 val koinVersion: String by project
 val kotlinVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
 val mockkVersion: String by project
+val spekVersion: String by project
 
 plugins {
     application
@@ -54,6 +56,10 @@ dependencies {
 
     // Ktor test engine for direct call processing (no web server, bound sockets, or real HTTP request)
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    
+    // Spek test framework
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 
     // MockK mocking library for Kotlin
     testImplementation("io.mockk:mockk:$mockkVersion")
@@ -61,6 +67,6 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform {
-        includeEngines("junit-jupiter")
+        includeEngines("junit-jupiter", "spek2")
     }
 }

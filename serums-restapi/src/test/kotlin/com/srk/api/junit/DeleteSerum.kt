@@ -1,5 +1,6 @@
-package com.srk.api
+package com.srk.api.junit
 
+import com.srk.api.module
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
