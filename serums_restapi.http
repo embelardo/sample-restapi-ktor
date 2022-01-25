@@ -1,0 +1,36 @@
+### Delete serum with ID 0 (Serum Worms Sackrider)
+# curl -i -X DELETE -H "Content-Type: application/json" http://localhost:8081/api/serums/0
+DELETE http://localhost:8081/api/serums/0
+Content-Type: application/json
+
+
+### Read all serums
+# curl -i -X GET http://localhost:8081/api/serums
+GET http://localhost:8081/api/serums
+
+
+### Read serum with ID 0
+# curl -i -X GET http://localhost:8081/api/serums/0
+GET http://localhost:8081/api/serums/0
+
+
+### Read non-existent serum
+# curl -i -X GET http://localhost:8081/api/serums/100
+GET http://localhost:8081/api/serums/100
+
+
+### Create new serum (Serum Ovaltine Splern)
+# curl -i -X POST -H "Content-Type: application/json" -d @curl_post_api_serums.json http://localhost:8081/api/serums
+POST http://localhost:8081/api/serums
+Content-Type: application/json
+
+< curl_post_api_serums.json
+
+
+### Update serum with ID 1 (Serum Squids Overturf)
+# curl -i -X PUT -H "Content-Type: application/json" -d @curl_put_api_serums.json http://localhost:8081/api/serums/1
+PUT http://localhost:8081/api/serums/1
+Content-Type: application/json
+
+< curl_put_api_serums.json
+
