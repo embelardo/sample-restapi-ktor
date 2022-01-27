@@ -1,8 +1,8 @@
 package com.srk.api.junit
 
 import com.srk.api.module
-import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.server.application.*
 import io.ktor.server.testing.*
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

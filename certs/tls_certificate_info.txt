@@ -1,0 +1,140 @@
+--------------------------------------------------------------------------------------------------
+miko@teuthete in ~/tmp/tls-stuff took 0s
+> ll
+total 72
+-rw-r--r--  1 miko  staff  1326 Jan 26 16:48 ca-crt.pem
+-rw-r--r--  1 miko  staff    17 Jan 26 17:07 ca-crt.srl
+-rw-r--r--  1 miko  staff  1858 Jan 26 16:48 ca-key.pem
+-rw-r--r--  1 miko  staff  1679 Jan 26 17:07 client1-crt.pem
+-rw-r--r--  1 miko  staff  1809 Jan 26 17:05 client1-csr.pem
+-rw-r--r--  1 miko  staff  3243 Jan 26 17:02 client1-key.pem
+-rw-r--r--  1 miko  staff  1679 Jan 26 16:58 server-crt.pem
+-rw-r--r--  1 miko  staff  1809 Jan 26 16:54 server-csr.pem
+-rw-r--r--  1 miko  staff  3247 Jan 26 16:49 server-key.pem
+
+--------------------------------------------------------------------------------------------------
+- Generate certificate authority (CA)
+
+$ openssl req -new -x509 -days 9999 -keyout ca-key.pem -out ca-crt.pem
+
+  - CA Password (aka: pem pass phrase)      : ca-secret
+  - Country Name                            : ca
+  - State or Province Name                  : qc
+  - Locality Name (City)                    : montreal
+  - Organization Name (Company)             : intelerad
+  - Organizational unit (section)           : skeleton crew
+  - CA Common Name (aka: distinguished name): ca.localhost
+  - Email Address                           : embelardo@gmail.com
+
+        ca-crt.pem
+        ca-key.pem
+
+--------------------------------------------------------------------------------------------------
+- Generate server certificate
+
+$ openssl genrsa -out server-key.pem 4096
+
+        server-key.pem
+
+- Generate server certificate signing request
+
+$ openssl req -new -key server-key.pem -out server-csr.pem
+
+  - Country Name                            : ca
+  - State or Province Name                  : qc
+  - Locality Name (City)                    : montreal
+  - Organization Name (Company)             : intelerad
+  - Organizational unit (section)           : skeleton crew
+  - CA Common Name (aka: distinguished name): server.localhost
+  - Email Address                           : embelardo@gmail.com
+  - Challenge Password                      : challenge-secret
+
+        server-csr.pem
+
+- Sign certificate using Certificate Authority
+
+$ openssl x509 -req -days 9999 -in server-csr.pem -CA ca-crt.pem -CAkey ca-key.pem -CAcreateserial -out server-crt.pem
+
+  - Pass phrase for ca-key.pem: ca-secret
+
+        ca-crt.srl
+        server-crt.pem
+
+- Verify certificate
+
+$ openssl verify -CAfile ca-crt.pem server-crt.pem
+server-crt.pem: OK
+
+--------------------------------------------------------------------------------------------------
+- Generate client certificate
+
+$ openssl genrsa -out client1-key.pem 4096
+
+        client1-key.pem
+
+- Generate client certificate signing request
+
+$ openssl req -new -key client1-key.pem -out client1-csr.pem
+
+  - Country Name                            : ca
+  - State or Province Name                  : qc
+  - Locality Name (City)                    : montreal
+  - Organization Name (Company)             : intelerad
+  - Organizational unit (section)           : skeleton crew
+  - CA Common Name (aka: distinguished name): client.localhost
+  - Email Address                           : embelardo@gmail.com
+  - Challenge Password                      : challenge-secret
+
+        client1-csr.pem
+
+- Sign certificate using Certificate Authority
+
+$ openssl x509 -req -days 9999 -in client1-csr.pem -CA ca-crt.pem -CAkey ca-key.pem -CAcreateserial -out client1-crt.pem
+
+  - Pass phrase for ca-key.pem: ca-secret
+
+        ca-crt.srl
+        client1-crt.pem
+
+- Verify certificate
+
+$ openssl verify -CAfile ca-crt.pem client1-crt.pem
+client1-crt.pem: OK
+
+--------------------------------------------------------------------------------------------------
+
+- Generate certificate using keytool (JKS)
+  - Server certificate
+
+$ keytool -genkey -keyalg RSA -alias serumsapi -keystore server-keystore.jks -validity 1000 -keysize 2048
+  keytool -list -v -keystore client-keystore.jks (to verify)
+  keytool -exportcert -rfc -keystore server-keystore.jks -storepass server-secret -alias serumsapi > server-cert-from-keystore.pem (to extract cert for use with curl)
+
+    - Keystore Password  : server-secret
+    - First and Last Name: emil belardo
+    - Organizational Unit: skeleton crew
+    - Organization       : intelerad
+    - City or Locality   : montreal
+    - State or Province  : qc
+    - Country code (2 ch): ca
+
+        server-keystore.jks
+
+  - Client certificate
+
+$ keytool -genkey -keyalg RSA -alias serumsapi -keystore client-keystore.jks -validity 1000 -keysize 2048
+  keytool -list -v -keystore server-keystore.jks (to verify)
+  keytool -importkeystore -srckeystore client-keystore.jks -destkeystore client-keystore.pfx -deststoretype PKCS12 -srcalias serumsapi -deststorepass client-secret -destkeypass client-secret (to extract public/private key for use with curl)
+  openssl pkcs12 -in client-keystore.pfx -out client-keystore.p12 -nodes (to decrypt encrypted pkcs12 to unencrypted p12 for use with curl)
+
+    - Keystore Password  : client-secret
+    - First and Last Name: emil belardo
+    - Organizational Unit: skeleton crew
+    - Organization       : intelerad
+    - City or Locality   : montreal
+    - State or Province  : qc
+    - Country code (2 ch): ca
+
+        client-keystore.jks
+
+--------------------------------------------------------------------------------------------------

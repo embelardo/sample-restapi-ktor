@@ -1,0 +1,129 @@
+--------------------------------------------------------------------------------------------------
+- Request with mTLS off
+
+> curl -i --insecure -v -X GET https://localhost:8082/api/serums
+Note: Unnecessary use of -X or --request, GET is already inferred.
+*   Trying ::1:8082...
+* Connected to localhost (::1) port 8082 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: C=ca; ST=qc; L=montreal; O=intelerad; OU=skeleton crew; CN=emil belardo
+*  start date: Jan 27 00:58:10 2022 GMT
+*  expire date: Oct 23 00:58:10 2024 GMT
+*  issuer: C=ca; ST=qc; L=montreal; O=intelerad; OU=skeleton crew; CN=emil belardo
+*  SSL certificate verify result: self signed certificate (18), continuing anyway.
+> GET /api/serums HTTP/1.1
+> Host: localhost:8082
+> User-Agent: curl/7.77.0
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+< Content-Type: application/json; charset=UTF-8
+Content-Type: application/json; charset=UTF-8
+< transfer-encoding: chunked
+transfer-encoding: chunked
+
+<
+[ {
+  "id" : 0,
+  "name" : "Serum Worms Sackrider",
+  "phase" : "ALPHA",
+  "tester" : "Felice Mienn",
+  "potency" : 0.78,
+  "testDate" : "2022-01-20"
+}, {
+  "id" : 1,
+  "name" : "Serum Squids Overturf",
+  "phase" : "BETA",
+  "tester" : "Praeda Rakespear",
+  "potency" : 0.87,
+  "testDate" : "2022-01-20"
+* Connection #0 to host localhost left intact
+} ]%
+
+--------------------------------------------------------------------------------------------------
+- Request with mTLS on
+
+> curl -i --insecure -v -X GET https://localhost:8082/api/serums
+Note: Unnecessary use of -X or --request, GET is already inferred.
+*   Trying ::1:8082...
+* Connected to localhost (::1) port 8082 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Request CERT (13):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Certificate (11):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS alert, bad certificate (554):
+* error:1401E412:SSL routines:CONNECT_CR_FINISHED:sslv3 alert bad certificate
+* Closing connection 0
+curl: (35) error:1401E412:SSL routines:CONNECT_CR_FINISHED:sslv3 alert bad certificate
+
+--------------------------------------------------------------------------------------------------
+- Request with mTLS on
+  - After extracting certificates from JKS keystore into something that curl can use
+
+> curl -i --cacert server-cert-from-keystore.pem --cert client-keystore.p12 -v -X GET https://localhost:8082/api/serums
+Note: Unnecessary use of -X or --request, GET is already inferred.
+*   Trying ::1:8082...
+* Connected to localhost (::1) port 8082 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*  CAfile: server-cert-from-keystore.pem
+*  CApath: none
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Request CERT (13):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Certificate (11):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS handshake, CERT verify (15):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: C=ca; ST=qc; L=montreal; O=intelerad; OU=skeleton crew; CN=emil belardo
+*  start date: Jan 27 00:58:10 2022 GMT
+*  expire date: Oct 23 00:58:10 2024 GMT
+* SSL: certificate subject name 'emil belardo' does not match target host name 'localhost'
+* Closing connection 0
+* TLSv1.2 (OUT), TLS alert, close notify (256):
+curl: (60) SSL: certificate subject name 'emil belardo' does not match target host name 'localhost'
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.

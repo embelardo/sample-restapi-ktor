@@ -4,9 +4,14 @@ DELETE http://localhost:8081/api/serums/0
 Content-Type: application/json
 
 
-### Read all serums
+### Read all serums (insecure)
 # curl -i -X GET http://localhost:8081/api/serums
 GET http://localhost:8081/api/serums
+
+
+### Read all serums (secure)
+# curl -i -X GET https://localhost:8082/api/serums
+GET https://localhost:8082/api/serums
 
 
 ### Read serum with ID 0
